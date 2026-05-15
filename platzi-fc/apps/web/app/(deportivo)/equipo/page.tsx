@@ -2,7 +2,7 @@ import { Metadata } from "next";
 import { PlayerCard } from "@/components/team/player-card";
 import { Breadcrumbs } from "@/components/shared/breadcrumbs";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui";
-import { mockPlayers, mockStaff } from "@/lib/data/mock-players";
+import { getPlayers, getStaff } from "@/lib/supabase/queries";
 import { generateSEO } from "@/lib/utils/seo";
 
 export const metadata: Metadata = generateSEO({
@@ -11,11 +11,20 @@ export const metadata: Metadata = generateSEO({
   path: "/equipo",
 });
 
-export default function EquipoPage() {
-  const goalkeepers = mockPlayers.filter((p) => p.position === "goalkeeper");
-  const defenders = mockPlayers.filter((p) => p.position === "defender");
-  const midfielders = mockPlayers.filter((p) => p.position === "midfielder");
-  const forwards = mockPlayers.filter((p) => p.position === "forward");
+export default async function EquipoPage() {
+  const [allPlayers, staff] = await Promise.all([getPlayers({ isActive: true }), getStaff()]);
+
+  const goalkeepers: typeof allPlayers = [];
+  const defenders: typeof allPlayers = [];
+  const midfielders: typeof allPlayers = [];
+  const forwards: typeof allPlayers = [];
+
+  for (const p of allPlayers) {
+    if (p.position === "goalkeeper") goalkeepers.push(p);
+    else if (p.position === "defender") defenders.push(p);
+    else if (p.position === "midfielder") midfielders.push(p);
+    else if (p.position === "forward") forwards.push(p);
+  }
 
   return (
     <div className="mx-auto max-w-7xl px-4 py-8 lg:px-8">
@@ -75,20 +84,20 @@ export default function EquipoPage() {
       )}
 
       {/* Staff */}
-      {mockStaff.length > 0 && (
+      {staff.length > 0 && (
         <section className="mt-12">
           <h2 className="text-2xl font-bold text-gray-900 mb-6">Cuerpo Técnico</h2>
           <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
-            {mockStaff.map((staff) => (
-              <Card key={staff.id}>
+            {staff.map((member) => (
+              <Card key={member.id}>
                 <CardHeader>
                   <CardTitle>
-                    {staff.first_name} {staff.last_name}
+                    {member.first_name} {member.last_name}
                   </CardTitle>
                 </CardHeader>
                 <CardContent>
-                  <p className="text-sm font-semibold text-platzi-green mb-2">{staff.role}</p>
-                  <p className="text-sm text-gray-600">{staff.nationality}</p>
+                  <p className="text-sm font-semibold text-platzi-green mb-2">{member.role}</p>
+                  <p className="text-sm text-gray-600">{member.nationality}</p>
                 </CardContent>
               </Card>
             ))}

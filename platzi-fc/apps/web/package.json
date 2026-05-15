@@ -7,9 +7,12 @@
     "build": "next build",
     "start": "next start",
     "lint": "next lint",
-    "typecheck": "tsc --noEmit"
+    "typecheck": "tsc --noEmit",
+    "seed": "tsx scripts/seed.ts"
   },
   "dependencies": {
+    "@supabase/ssr": "^0.5.2",
+    "@supabase/supabase-js": "^2.47.10",
     "clsx": "^2.1.1",
     "next": "^15.1.6",
     "react": "^19.0.0",
@@ -21,10 +24,12 @@
     "@types/react": "^19.0.6",
     "@types/react-dom": "^19.0.2",
     "autoprefixer": "^10.4.20",
+    "dotenv": "^17.4.2",
     "eslint": "^9.18.0",
     "eslint-config-next": "^15.1.6",
     "postcss": "^8.4.49",
     "tailwindcss": "^3.4.17",
+    "tsx": "^4.19.2",
     "typescript": "^5.7.3"
   }
 }

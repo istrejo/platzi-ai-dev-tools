@@ -3,7 +3,7 @@ import { notFound } from "next/navigation";
 import { Scoreboard } from "@/components/matches/scoreboard";
 import { Breadcrumbs } from "@/components/shared/breadcrumbs";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui";
-import { mockMatches } from "@/lib/data/mock-matches";
+import { getMatchById } from "@/lib/supabase/queries";
 import { generateSEO } from "@/lib/utils/seo";
 
 interface PageProps {
@@ -12,7 +12,7 @@ interface PageProps {
 
 export async function generateMetadata({ params }: PageProps): Promise<Metadata> {
   const { slug } = await params;
-  const match = mockMatches.find((m) => m.id === slug);
+  const match = await getMatchById(slug);
 
   if (!match) {
     return generateSEO({
@@ -31,7 +31,7 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
 
 export default async function PartidoDetailPage({ params }: PageProps) {
   const { slug } = await params;
-  const match = mockMatches.find((m) => m.id === slug);
+  const match = await getMatchById(slug);
 
   if (!match) {
     notFound();

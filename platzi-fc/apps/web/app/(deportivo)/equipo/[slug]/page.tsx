@@ -2,7 +2,7 @@ import { Metadata } from "next";
 import { notFound } from "next/navigation";
 import { Breadcrumbs } from "@/components/shared/breadcrumbs";
 import { Card, CardContent, Badge } from "@/components/ui";
-import { mockPlayers } from "@/lib/data/mock-players";
+import { getPlayerBySlug } from "@/lib/supabase/queries";
 import { generateSEO } from "@/lib/utils/seo";
 
 interface PageProps {
@@ -25,7 +25,7 @@ const positionColors = {
 
 export async function generateMetadata({ params }: PageProps): Promise<Metadata> {
   const { slug } = await params;
-  const player = mockPlayers.find((p) => p.slug === slug);
+  const player = await getPlayerBySlug(slug);
 
   if (!player) {
     return generateSEO({
@@ -44,7 +44,7 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
 
 export default async function PlayerDetailPage({ params }: PageProps) {
   const { slug } = await params;
-  const player = mockPlayers.find((p) => p.slug === slug);
+  const player = await getPlayerBySlug(slug);
 
   if (!player) {
     notFound();
@@ -160,13 +160,21 @@ export default async function PlayerDetailPage({ params }: PageProps) {
                 <div className="flex justify-between">
                   <span className="text-gray-600">Goles:</span>
                   <span className="font-semibold">
-                    {player.position === "forward" ? "8" : player.position === "midfielder" ? "3" : "0"}
+                    {player.position === "forward"
+                      ? "8"
+                      : player.position === "midfielder"
+                        ? "3"
+                        : "0"}
                   </span>
                 </div>
                 <div className="flex justify-between">
                   <span className="text-gray-600">Asistencias:</span>
                   <span className="font-semibold">
-                    {player.position === "midfielder" ? "5" : player.position === "forward" ? "4" : "0"}
+                    {player.position === "midfielder"
+                      ? "5"
+                      : player.position === "forward"
+                        ? "4"
+                        : "0"}
                   </span>
                 </div>
                 <div className="flex justify-between">

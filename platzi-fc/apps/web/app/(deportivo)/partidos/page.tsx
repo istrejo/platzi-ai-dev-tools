@@ -1,7 +1,7 @@
 import { Metadata } from "next";
 import { MatchCard } from "@/components/matches/match-card";
 import { Breadcrumbs } from "@/components/shared/breadcrumbs";
-import { mockMatches } from "@/lib/data/mock-matches";
+import { getMatches } from "@/lib/supabase/queries";
 import { generateSEO } from "@/lib/utils/seo";
 
 export const metadata: Metadata = generateSEO({
@@ -10,9 +10,16 @@ export const metadata: Metadata = generateSEO({
   path: "/partidos",
 });
 
-export default function PartidosPage() {
-  const upcomingMatches = mockMatches.filter((m) => m.status === "scheduled");
-  const pastMatches = mockMatches.filter((m) => m.status === "finished");
+export default async function PartidosPage() {
+  const allMatches = await getMatches();
+
+  const upcomingMatches: typeof allMatches = [];
+  const pastMatches: typeof allMatches = [];
+
+  for (const m of allMatches) {
+    if (m.status === "scheduled") upcomingMatches.push(m);
+    else if (m.status === "finished") pastMatches.push(m);
+  }
 
   return (
     <div className="mx-auto max-w-7xl px-4 py-8 lg:px-8">

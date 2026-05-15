@@ -29,9 +29,9 @@
 - [x] Detalle de partido con schema.org SportsEvent
 - [x] Componentes: MatchCard, Scoreboard
 - [x] Mock data: 4 partidos
-- [ ] Migraciones DB reales (seasons, competitions, teams, matches)
-- [ ] Script de seed con 20+ partidos
-- [ ] Integración con Supabase
+- [x] Migraciones DB reales (seasons, competitions, teams, matches)
+- [x] Script de seed con 20+ partidos
+- [x] Integración con Supabase
 
 ### ✅ Sprint 3: Equipo y Competición (COMPLETADO)
 
@@ -40,9 +40,9 @@
 - [x] Clasificación con tabla responsive
 - [x] Componente PlayerCard
 - [x] Mock data: 6 jugadores, 2 staff, 5 equipos
-- [ ] Migraciones DB (players, player_season_stats, staff, standings)
-- [ ] Seed con 25 jugadores + 8 staff
-- [ ] Integración con Supabase
+- [x] Migraciones DB (players, player_season_stats, staff, standings)
+- [x] Seed con 25 jugadores + 8 staff
+- [x] Integración con Supabase
 
 ### ✅ Sprint 4: Noticias y Media (COMPLETADO)
 
@@ -55,15 +55,15 @@
 - [x] Portable Text renderer
 - [x] Media embeds y relacionados
 
-### ⏳ Integración Backend (EN PROGRESO)
+### ✅ Integración Backend (COMPLETADO)
 
 - [x] Configurar Supabase client (browser y server)
 - [x] Tablas deportivas ya creadas (20 tablas)
 - [x] Script de seed completo
 - [x] Helpers de queries (lib/supabase/queries.ts)
-- [ ] Ejecutar seed en Supabase
-- [ ] Reemplazar mock data con queries reales en páginas
-- [ ] Configurar Row Level Security (RLS)
+- [x] Ejecutar seed en Supabase
+- [x] Reemplazar mock data con queries reales en páginas
+- [x] Configurar Row Level Security (RLS)
 
 ### ❌ Sprint MVP-Final (PENDIENTE)
 

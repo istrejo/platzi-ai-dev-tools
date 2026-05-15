@@ -1,7 +1,7 @@
 import { Metadata } from "next";
 import { NewsCard } from "@/components/news/news-card";
 import { Breadcrumbs } from "@/components/shared/breadcrumbs";
-import { mockNews } from "@/lib/data/mock-news";
+import { getNews } from "@/lib/supabase/queries";
 import { generateSEO } from "@/lib/utils/seo";
 
 export const metadata: Metadata = generateSEO({
@@ -10,8 +10,8 @@ export const metadata: Metadata = generateSEO({
   path: "/noticias",
 });
 
-export default function NoticiasPage() {
-  const publishedNews = mockNews.filter((n) => n.status === "published");
+export default async function NoticiasPage() {
+  const publishedNews = await getNews({ status: "published" });
 
   return (
     <div className="mx-auto max-w-7xl px-4 py-8 lg:px-8">
@@ -19,9 +19,7 @@ export default function NoticiasPage() {
 
       <div className="mt-8">
         <h1 className="text-4xl font-bold text-gray-900 mb-2">Noticias</h1>
-        <p className="text-lg text-gray-600">
-          Mantente al día con las últimas novedades del club
-        </p>
+        <p className="text-lg text-gray-600">Mantente al día con las últimas novedades del club</p>
       </div>
 
       <div className="mt-12 grid gap-6 md:grid-cols-2 lg:grid-cols-3">

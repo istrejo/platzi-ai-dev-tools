@@ -1,7 +1,8 @@
 import { Metadata } from "next";
+import { Suspense } from "react";
 import { Breadcrumbs } from "@/components/shared/breadcrumbs";
 import { Card, CardContent, Badge } from "@/components/ui";
-import { mockStandings } from "@/lib/data/mock-standings";
+import { getStandings, getCurrentSeason } from "@/lib/supabase/queries";
 import { generateSEO } from "@/lib/utils/seo";
 
 export const metadata: Metadata = generateSEO({
@@ -10,27 +11,25 @@ export const metadata: Metadata = generateSEO({
   path: "/competicion",
 });
 
+const getFormBadge = (result: string) => {
+  const variants = {
+    W: "success" as const,
+    D: "warning" as const,
+    L: "error" as const,
+  };
+  return variants[result as keyof typeof variants] || "default";
+};
+
+const getFormLabel = (result: string) => {
+  const labels = {
+    W: "V",
+    D: "E",
+    L: "D",
+  };
+  return labels[result as keyof typeof labels] || result;
+};
+
 export default function CompeticionPage() {
-  const sortedStandings = [...mockStandings].sort((a, b) => a.position - b.position);
-
-  const getFormBadge = (result: string) => {
-    const variants = {
-      W: "success" as const,
-      D: "warning" as const,
-      L: "error" as const,
-    };
-    return variants[result as keyof typeof variants] || "default";
-  };
-
-  const getFormLabel = (result: string) => {
-    const labels = {
-      W: "V",
-      D: "E",
-      L: "D",
-    };
-    return labels[result as keyof typeof labels] || result;
-  };
-
   return (
     <div className="mx-auto max-w-7xl px-4 py-8 lg:px-8">
       <Breadcrumbs items={[{ label: "Clasificación" }]} />
@@ -40,8 +39,62 @@ export default function CompeticionPage() {
         <p className="text-lg text-gray-600">Liga Nacional - Temporada 2024/2025</p>
       </div>
 
+      <Suspense fallback={<StandingsSkeleton />}>
+        <StandingsTable />
+      </Suspense>
+
+      {/* Legend */}
+      <div className="mt-6 flex flex-wrap gap-4 text-sm text-gray-600">
+        <div className="flex items-center gap-2">
+          <div className="w-4 h-4 bg-platzi-green/20 rounded"></div>
+          <span>Platzi FC</span>
+        </div>
+        <div className="flex items-center gap-2">
+          <span className="font-semibold text-platzi-green">1-4</span>
+          <span>Champions League</span>
+        </div>
+        <div className="flex items-center gap-2">
+          <span className="font-semibold text-red-600">18-20</span>
+          <span>Descenso</span>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+function StandingsSkeleton() {
+  return (
+    <Card className="mt-8">
+      <CardContent className="p-8">
+        <div className="animate-pulse space-y-3">
+          {Array.from({ length: 10 }).map((_, i) => (
+            <div key={i} className="h-10 bg-gray-100 rounded" />
+          ))}
+        </div>
+      </CardContent>
+    </Card>
+  );
+}
+
+async function StandingsTable() {
+  const season = await getCurrentSeason();
+
+  if (!season) {
+    return (
       <Card className="mt-8">
-        <CardContent className="p-0">
+        <CardContent className="p-8 text-center text-gray-500">
+          No hay temporada activa configurada.
+        </CardContent>
+      </Card>
+    );
+  }
+
+  const standings = await getStandings(season.id);
+  const sortedStandings = [...standings].sort((a, b) => a.position - b.position);
+
+  return (
+    <Card className="mt-8">
+      <CardContent className="p-0">
           {/* Desktop Table */}
           <div className="hidden md:block overflow-x-auto">
             <table className="w-full">
@@ -86,7 +139,9 @@ export default function CompeticionPage() {
                 {sortedStandings.map((team) => (
                   <tr
                     key={team.id}
-                    className={team.team_id === "platzi-fc" ? "bg-platzi-green/5" : "hover:bg-gray-50"}
+                    className={
+                      team.team_slug === "platzi-fc" ? "bg-platzi-green/5" : "hover:bg-gray-50"
+                    }
                   >
                     <td className="px-6 py-4 whitespace-nowrap">
                       <div className="flex items-center">
@@ -144,7 +199,11 @@ export default function CompeticionPage() {
                     <td className="px-6 py-4 whitespace-nowrap">
                       <div className="flex gap-1 justify-center">
                         {team.form?.split("").map((result, idx) => (
-                          <Badge key={idx} variant={getFormBadge(result)} className="w-6 h-6 p-0 flex items-center justify-center text-xs">
+                          <Badge
+                            key={idx}
+                            variant={getFormBadge(result)}
+                            className="w-6 h-6 p-0 flex items-center justify-center text-xs"
+                          >
                             {getFormLabel(result)}
                           </Badge>
                         ))}
@@ -161,7 +220,7 @@ export default function CompeticionPage() {
             {sortedStandings.map((team) => (
               <div
                 key={team.id}
-                className={`p-4 ${team.team_id === "platzi-fc" ? "bg-platzi-green/5" : ""}`}
+                className={`p-4 ${team.team_slug === "platzi-fc" ? "bg-platzi-green/5" : ""}`}
               >
                 <div className="flex items-center justify-between mb-3">
                   <div className="flex items-center gap-3">
@@ -223,24 +282,7 @@ export default function CompeticionPage() {
               </div>
             ))}
           </div>
-        </CardContent>
-      </Card>
-
-      {/* Legend */}
-      <div className="mt-6 flex flex-wrap gap-4 text-sm text-gray-600">
-        <div className="flex items-center gap-2">
-          <div className="w-4 h-4 bg-platzi-green/20 rounded"></div>
-          <span>Platzi FC</span>
-        </div>
-        <div className="flex items-center gap-2">
-          <span className="font-semibold text-platzi-green">1-4</span>
-          <span>Champions League</span>
-        </div>
-        <div className="flex items-center gap-2">
-          <span className="font-semibold text-red-600">18-20</span>
-          <span>Descenso</span>
-        </div>
-      </div>
-    </div>
+      </CardContent>
+    </Card>
   );
 }
