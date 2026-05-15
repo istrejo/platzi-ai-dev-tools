@@ -154,6 +154,7 @@ export async function getStandings(seasonId?: string, competitionId?: string) {
   return data.map((standing) => ({
     ...standing,
     team_name: standing.team?.name || "",
+    team_slug: standing.team?.slug || "",
   }));
 }
 

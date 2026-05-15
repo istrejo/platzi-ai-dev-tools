@@ -89,7 +89,7 @@ export default async function CompeticionPage() {
                   <tr
                     key={team.id}
                     className={
-                      team.team_id === "platzi-fc" ? "bg-platzi-green/5" : "hover:bg-gray-50"
+                      team.team_slug === "platzi-fc" ? "bg-platzi-green/5" : "hover:bg-gray-50"
                     }
                   >
                     <td className="px-6 py-4 whitespace-nowrap">
@@ -169,7 +169,7 @@ export default async function CompeticionPage() {
             {sortedStandings.map((team) => (
               <div
                 key={team.id}
-                className={`p-4 ${team.team_id === "platzi-fc" ? "bg-platzi-green/5" : ""}`}
+                className={`p-4 ${team.team_slug === "platzi-fc" ? "bg-platzi-green/5" : ""}`}
               >
                 <div className="flex items-center justify-between mb-3">
                   <div className="flex items-center gap-3">
