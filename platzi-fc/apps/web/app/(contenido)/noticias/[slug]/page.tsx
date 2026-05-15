@@ -1,7 +1,7 @@
 import { Metadata } from "next";
 import { notFound } from "next/navigation";
 import { Breadcrumbs } from "@/components/shared/breadcrumbs";
-import { mockNews } from "@/lib/data/mock-news";
+import { getNewsBySlug } from "@/lib/supabase/queries";
 import { generateSEO } from "@/lib/utils/seo";
 
 interface PageProps {
@@ -10,28 +10,31 @@ interface PageProps {
 
 export async function generateMetadata({ params }: PageProps): Promise<Metadata> {
   const { slug } = await params;
-  const article = mockNews.find((n) => n.slug === slug);
 
-  if (!article) {
+  try {
+    const article = await getNewsBySlug(slug);
+
+    return generateSEO({
+      title: `${article.title} - Platzi FC`,
+      description: article.excerpt || "",
+      path: `/noticias/${slug}`,
+    });
+  } catch {
     return generateSEO({
       title: "Noticia no encontrada - Platzi FC",
       description: "La noticia que buscas no existe",
       path: `/noticias/${slug}`,
     });
   }
-
-  return generateSEO({
-    title: `${article.title} - Platzi FC`,
-    description: article.excerpt || "",
-    path: `/noticias/${slug}`,
-  });
 }
 
 export default async function NoticiaDetailPage({ params }: PageProps) {
   const { slug } = await params;
-  const article = mockNews.find((n) => n.slug === slug);
 
-  if (!article) {
+  let article;
+  try {
+    article = await getNewsBySlug(slug);
+  } catch {
     notFound();
   }
 
@@ -67,9 +70,7 @@ export default async function NoticiaDetailPage({ params }: PageProps) {
       />
 
       <article className="mx-auto max-w-4xl px-4 py-8 lg:px-8">
-        <Breadcrumbs
-          items={[{ label: "Noticias", href: "/noticias" }, { label: article.title }]}
-        />
+        <Breadcrumbs items={[{ label: "Noticias", href: "/noticias" }, { label: article.title }]} />
 
         <header className="mt-8">
           <div className="text-sm text-gray-500 mb-4">

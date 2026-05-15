@@ -182,3 +182,28 @@ export async function getTeams() {
   if (error) throw error;
   return data as Team[];
 }
+
+// News
+export async function getNews(filters?: { status?: string; limit?: number }) {
+  const supabase = await createClient();
+  let query = supabase.from("news").select("*").order("published_at", { ascending: false });
+
+  if (filters?.status) {
+    query = query.eq("status", filters.status);
+  }
+  if (filters?.limit) {
+    query = query.limit(filters.limit);
+  }
+
+  const { data, error } = await query;
+  if (error) throw error;
+  return data;
+}
+
+export async function getNewsBySlug(slug: string) {
+  const supabase = await createClient();
+  const { data, error } = await supabase.from("news").select("*").eq("slug", slug).single();
+
+  if (error) throw error;
+  return data;
+}
