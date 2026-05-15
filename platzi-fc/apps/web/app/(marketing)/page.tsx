@@ -4,7 +4,9 @@ import { getMatches } from "@/lib/supabase/queries";
 
 export default async function HomePage() {
   const allMatches = await getMatches();
-  const nextMatch = allMatches.find((m) => m.status === "scheduled");
+  const nextMatch = allMatches
+    .filter((m) => m.status === "scheduled")
+    .sort((a, b) => new Date(a.match_date).getTime() - new Date(b.match_date).getTime())[0];
   const lastMatch = allMatches
     .filter((m) => m.status === "finished")
     .sort((a, b) => new Date(b.match_date).getTime() - new Date(a.match_date).getTime())[0];
