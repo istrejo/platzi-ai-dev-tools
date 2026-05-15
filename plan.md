@@ -55,15 +55,15 @@
 - [x] Portable Text renderer
 - [x] Media embeds y relacionados
 
-### ⏳ Integración Backend (EN PROGRESO)
+### ✅ Integración Backend (COMPLETADO)
 
 - [x] Configurar Supabase client (browser y server)
 - [x] Tablas deportivas ya creadas (20 tablas)
 - [x] Script de seed completo
 - [x] Helpers de queries (lib/supabase/queries.ts)
 - [x] Ejecutar seed en Supabase
-- [ ] Reemplazar mock data con queries reales en páginas
-- [ ] Configurar Row Level Security (RLS)
+- [x] Reemplazar mock data con queries reales en páginas
+- [x] Configurar Row Level Security (RLS)
 
 ### ❌ Sprint MVP-Final (PENDIENTE)
 
