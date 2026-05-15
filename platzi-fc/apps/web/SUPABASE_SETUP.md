@@ -33,6 +33,7 @@ pnpm seed
 ```
 
 Esto creará:
+
 - 1 temporada (2024/2025)
 - 2 competiciones (Liga Nacional, Copa del Rey)
 - 5 equipos (Platzi FC + 4 rivales)
@@ -48,35 +49,15 @@ Puedes verificar que los datos se insertaron correctamente:
 1. Ve a Supabase Dashboard > Table Editor
 2. Revisa las tablas: `seasons`, `teams`, `players`, `matches`, `standings`
 
-## 5. Configurar Row Level Security (RLS)
+## 5. Row Level Security (RLS)
 
-⚠️ **IMPORTANTE**: Actualmente todas las tablas tienen RLS deshabilitado, lo que significa que cualquiera con la anon key puede leer/modificar los datos.
+✅ **Configurado**: Todas las tablas tienen Row Level Security (RLS) habilitado con políticas de lectura pública.
 
-Para habilitar RLS en todas las tablas (recomendado para producción):
+Esto significa que:
 
-```sql
--- Habilitar RLS en todas las tablas
-ALTER TABLE public.seasons ENABLE ROW LEVEL SECURITY;
-ALTER TABLE public.competitions ENABLE ROW LEVEL SECURITY;
-ALTER TABLE public.teams ENABLE ROW LEVEL SECURITY;
-ALTER TABLE public.players ENABLE ROW LEVEL SECURITY;
-ALTER TABLE public.staff ENABLE ROW LEVEL SECURITY;
-ALTER TABLE public.matches ENABLE ROW LEVEL SECURITY;
-ALTER TABLE public.standings ENABLE ROW LEVEL SECURITY;
-ALTER TABLE public.player_match_stats ENABLE ROW LEVEL SECURITY;
-ALTER TABLE public.player_season_stats ENABLE ROW LEVEL SECURITY;
-
--- Crear políticas para permitir lectura pública
-CREATE POLICY "Allow public read access" ON public.seasons FOR SELECT USING (true);
-CREATE POLICY "Allow public read access" ON public.competitions FOR SELECT USING (true);
-CREATE POLICY "Allow public read access" ON public.teams FOR SELECT USING (true);
-CREATE POLICY "Allow public read access" ON public.players FOR SELECT USING (true);
-CREATE POLICY "Allow public read access" ON public.staff FOR SELECT USING (true);
-CREATE POLICY "Allow public read access" ON public.matches FOR SELECT USING (true);
-CREATE POLICY "Allow public read access" ON public.standings FOR SELECT USING (true);
-CREATE POLICY "Allow public read access" ON public.player_match_stats FOR SELECT USING (true);
-CREATE POLICY "Allow public read access" ON public.player_season_stats FOR SELECT USING (true);
-```
+- Los usuarios pueden **leer** datos públicos usando la anon key
+- **No pueden** modificar, insertar o eliminar datos sin autenticación
+- Solo el contenido activo/publicado es visible (ej: noticias con `status = 'published'`)
 
 ## 6. Estructura de la Base de Datos
 
