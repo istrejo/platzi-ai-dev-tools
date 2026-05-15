@@ -12,8 +12,7 @@ export const metadata: Metadata = generateSEO({
 });
 
 export default async function EquipoPage() {
-  const allPlayers = await getPlayers({ isActive: true });
-  const staff = await getStaff();
+  const [allPlayers, staff] = await Promise.all([getPlayers({ isActive: true }), getStaff()]);
 
   const goalkeepers = allPlayers.filter((p) => p.position === "goalkeeper");
   const defenders = allPlayers.filter((p) => p.position === "defender");
