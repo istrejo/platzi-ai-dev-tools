@@ -21,7 +21,10 @@ export async function getCurrentSeason() {
     .eq("is_current", true)
     .single();
 
-  if (error) throw error;
+  if (error) {
+    if (error.code === "PGRST116") return null;
+    throw error;
+  }
   return data as Season;
 }
 

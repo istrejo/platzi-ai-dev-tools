@@ -78,6 +78,17 @@ function StandingsSkeleton() {
 
 async function StandingsTable() {
   const season = await getCurrentSeason();
+
+  if (!season) {
+    return (
+      <Card className="mt-8">
+        <CardContent className="p-8 text-center text-gray-500">
+          No hay temporada activa configurada.
+        </CardContent>
+      </Card>
+    );
+  }
+
   const standings = await getStandings(season.id);
   const sortedStandings = [...standings].sort((a, b) => a.position - b.position);
 
