@@ -117,12 +117,22 @@ function MatchHighlightsSkeleton() {
 
 async function MatchHighlights() {
   const allMatches = await getMatches();
-  const nextMatch = allMatches
-    .filter((m) => m.status === "scheduled")
-    .sort((a, b) => new Date(a.match_date).getTime() - new Date(b.match_date).getTime())[0];
-  const lastMatch = allMatches
-    .filter((m) => m.status === "finished")
-    .sort((a, b) => new Date(b.match_date).getTime() - new Date(a.match_date).getTime())[0];
+
+  let nextMatch: (typeof allMatches)[number] | undefined;
+  let lastMatch: (typeof allMatches)[number] | undefined;
+  let nextTime = Infinity;
+  let lastTime = -Infinity;
+
+  for (const m of allMatches) {
+    const time = new Date(m.match_date).getTime();
+    if (m.status === "scheduled" && time < nextTime) {
+      nextMatch = m;
+      nextTime = time;
+    } else if (m.status === "finished" && time > lastTime) {
+      lastMatch = m;
+      lastTime = time;
+    }
+  }
 
   return (
     <>
