@@ -1,3 +1,4 @@
+import { cache } from "react";
 import { createClient } from "./server";
 import type { Match, Player, Standing, Season, Competition, Team, Staff } from "@/types";
 
@@ -68,7 +69,7 @@ export async function getMatches(filters?: {
   }));
 }
 
-export async function getMatchById(id: string) {
+export const getMatchById = cache(async (id: string) => {
   const supabase = await createClient();
   const { data, error } = await supabase
     .from("matches")
@@ -94,7 +95,7 @@ export async function getMatchById(id: string) {
     away_team_name: data.away_team?.name || "",
     competition_name: data.competition?.name || "",
   };
-}
+});
 
 // Players
 export async function getPlayers(filters?: { position?: string; isActive?: boolean }) {
@@ -113,7 +114,7 @@ export async function getPlayers(filters?: { position?: string; isActive?: boole
   return data as Player[];
 }
 
-export async function getPlayerBySlug(slug: string) {
+export const getPlayerBySlug = cache(async (slug: string) => {
   const supabase = await createClient();
   const { data, error } = await supabase.from("players").select("*").eq("slug", slug).single();
 
@@ -122,7 +123,7 @@ export async function getPlayerBySlug(slug: string) {
     throw error;
   }
   return data as Player;
-}
+});
 
 // Staff
 export async function getStaff() {
@@ -210,7 +211,7 @@ export async function getNews(filters?: { status?: string; limit?: number }) {
   return data;
 }
 
-export async function getNewsBySlug(slug: string) {
+export const getNewsBySlug = cache(async (slug: string) => {
   const supabase = await createClient();
   const { data, error } = await supabase.from("news").select("*").eq("slug", slug).single();
 
@@ -219,4 +220,4 @@ export async function getNewsBySlug(slug: string) {
     throw error;
   }
   return data;
-}
+});
