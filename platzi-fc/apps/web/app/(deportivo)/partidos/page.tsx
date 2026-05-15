@@ -12,8 +12,14 @@ export const metadata: Metadata = generateSEO({
 
 export default async function PartidosPage() {
   const allMatches = await getMatches();
-  const upcomingMatches = allMatches.filter((m) => m.status === "scheduled");
-  const pastMatches = allMatches.filter((m) => m.status === "finished");
+
+  const upcomingMatches: typeof allMatches = [];
+  const pastMatches: typeof allMatches = [];
+
+  for (const m of allMatches) {
+    if (m.status === "scheduled") upcomingMatches.push(m);
+    else if (m.status === "finished") pastMatches.push(m);
+  }
 
   return (
     <div className="mx-auto max-w-7xl px-4 py-8 lg:px-8">
