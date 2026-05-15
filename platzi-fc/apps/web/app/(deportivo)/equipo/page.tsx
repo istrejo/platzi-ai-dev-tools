@@ -14,10 +14,17 @@ export const metadata: Metadata = generateSEO({
 export default async function EquipoPage() {
   const [allPlayers, staff] = await Promise.all([getPlayers({ isActive: true }), getStaff()]);
 
-  const goalkeepers = allPlayers.filter((p) => p.position === "goalkeeper");
-  const defenders = allPlayers.filter((p) => p.position === "defender");
-  const midfielders = allPlayers.filter((p) => p.position === "midfielder");
-  const forwards = allPlayers.filter((p) => p.position === "forward");
+  const goalkeepers: typeof allPlayers = [];
+  const defenders: typeof allPlayers = [];
+  const midfielders: typeof allPlayers = [];
+  const forwards: typeof allPlayers = [];
+
+  for (const p of allPlayers) {
+    if (p.position === "goalkeeper") goalkeepers.push(p);
+    else if (p.position === "defender") defenders.push(p);
+    else if (p.position === "midfielder") midfielders.push(p);
+    else if (p.position === "forward") forwards.push(p);
+  }
 
   return (
     <div className="mx-auto max-w-7xl px-4 py-8 lg:px-8">
