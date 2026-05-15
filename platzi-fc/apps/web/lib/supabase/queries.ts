@@ -80,7 +80,10 @@ export async function getMatchById(id: string) {
     .eq("id", id)
     .single();
 
-  if (error) throw error;
+  if (error) {
+    if (error.code === "PGRST116") return null;
+    throw error;
+  }
 
   return {
     ...data,
@@ -111,7 +114,10 @@ export async function getPlayerBySlug(slug: string) {
   const supabase = await createClient();
   const { data, error } = await supabase.from("players").select("*").eq("slug", slug).single();
 
-  if (error) throw error;
+  if (error) {
+    if (error.code === "PGRST116") return null;
+    throw error;
+  }
   return data as Player;
 }
 
@@ -205,6 +211,9 @@ export async function getNewsBySlug(slug: string) {
   const supabase = await createClient();
   const { data, error } = await supabase.from("news").select("*").eq("slug", slug).single();
 
-  if (error) throw error;
+  if (error) {
+    if (error.code === "PGRST116") return null;
+    throw error;
+  }
   return data;
 }

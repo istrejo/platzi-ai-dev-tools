@@ -25,31 +25,28 @@ const positionColors = {
 
 export async function generateMetadata({ params }: PageProps): Promise<Metadata> {
   const { slug } = await params;
+  const player = await getPlayerBySlug(slug);
 
-  try {
-    const player = await getPlayerBySlug(slug);
-
-    return generateSEO({
-      title: `${player.first_name} ${player.last_name} - Platzi FC`,
-      description: `Perfil de ${player.first_name} ${player.last_name}, ${positionLabels[player.position]} del Platzi FC`,
-      path: `/equipo/${slug}`,
-    });
-  } catch {
+  if (!player) {
     return generateSEO({
       title: "Jugador no encontrado - Platzi FC",
       description: "El jugador que buscas no existe",
       path: `/equipo/${slug}`,
     });
   }
+
+  return generateSEO({
+    title: `${player.first_name} ${player.last_name} - Platzi FC`,
+    description: `Perfil de ${player.first_name} ${player.last_name}, ${positionLabels[player.position]} del Platzi FC`,
+    path: `/equipo/${slug}`,
+  });
 }
 
 export default async function PlayerDetailPage({ params }: PageProps) {
   const { slug } = await params;
+  const player = await getPlayerBySlug(slug);
 
-  let player;
-  try {
-    player = await getPlayerBySlug(slug);
-  } catch {
+  if (!player) {
     notFound();
   }
 

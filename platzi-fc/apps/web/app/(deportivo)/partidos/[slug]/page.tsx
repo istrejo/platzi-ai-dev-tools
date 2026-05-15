@@ -12,31 +12,28 @@ interface PageProps {
 
 export async function generateMetadata({ params }: PageProps): Promise<Metadata> {
   const { slug } = await params;
+  const match = await getMatchById(slug);
 
-  try {
-    const match = await getMatchById(slug);
-
-    return generateSEO({
-      title: `${match.home_team_name} vs ${match.away_team_name} - Platzi FC`,
-      description: `Información del partido ${match.home_team_name} vs ${match.away_team_name} - ${match.competition_name}`,
-      path: `/partidos/${slug}`,
-    });
-  } catch {
+  if (!match) {
     return generateSEO({
       title: "Partido no encontrado - Platzi FC",
       description: "El partido que buscas no existe",
       path: `/partidos/${slug}`,
     });
   }
+
+  return generateSEO({
+    title: `${match.home_team_name} vs ${match.away_team_name} - Platzi FC`,
+    description: `Información del partido ${match.home_team_name} vs ${match.away_team_name} - ${match.competition_name}`,
+    path: `/partidos/${slug}`,
+  });
 }
 
 export default async function PartidoDetailPage({ params }: PageProps) {
   const { slug } = await params;
+  const match = await getMatchById(slug);
 
-  let match;
-  try {
-    match = await getMatchById(slug);
-  } catch {
+  if (!match) {
     notFound();
   }
 
