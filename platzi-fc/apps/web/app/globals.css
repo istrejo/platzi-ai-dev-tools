@@ -1,0 +1,16 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  --platzi-green: #98ca3f;
+  --platzi-blue: #121f3d;
+  --platzi-dark: #0a1628;
+  --platzi-light: #f7fafc;
+}
+
+@layer base {
+  body {
+    @apply bg-white text-gray-900 antialiased;
+  }
+}
