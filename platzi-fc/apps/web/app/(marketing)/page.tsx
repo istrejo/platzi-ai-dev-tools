@@ -1,16 +1,9 @@
 import { Button, Card, CardContent, CardHeader, CardTitle, Badge } from "@/components/ui";
 import Link from "next/link";
+import { Suspense } from "react";
 import { getMatches } from "@/lib/supabase/queries";
 
-export default async function HomePage() {
-  const allMatches = await getMatches();
-  const nextMatch = allMatches
-    .filter((m) => m.status === "scheduled")
-    .sort((a, b) => new Date(a.match_date).getTime() - new Date(b.match_date).getTime())[0];
-  const lastMatch = allMatches
-    .filter((m) => m.status === "finished")
-    .sort((a, b) => new Date(b.match_date).getTime() - new Date(a.match_date).getTime())[0];
-
+export default function HomePage() {
   return (
     <>
       {/* Hero Section */}
@@ -38,6 +31,101 @@ export default async function HomePage() {
         </div>
       </section>
 
+      <Suspense fallback={<MatchHighlightsSkeleton />}>
+        <MatchHighlights />
+      </Suspense>
+
+      {/* Quick Links */}
+      <section className="py-16 bg-white">
+        <div className="mx-auto max-w-7xl px-4 lg:px-8">
+          <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-4">
+            <Link href="/partidos">
+              <Card className="hover:shadow-lg transition-shadow cursor-pointer h-full">
+                <CardHeader>
+                  <CardTitle className="text-lg">Partidos</CardTitle>
+                </CardHeader>
+                <CardContent>
+                  <p className="text-sm text-gray-600">Calendario, resultados y clasificación</p>
+                </CardContent>
+              </Card>
+            </Link>
+
+            <Link href="/equipo">
+              <Card className="hover:shadow-lg transition-shadow cursor-pointer h-full">
+                <CardHeader>
+                  <CardTitle className="text-lg">Equipo</CardTitle>
+                </CardHeader>
+                <CardContent>
+                  <p className="text-sm text-gray-600">Plantilla y cuerpo técnico</p>
+                </CardContent>
+              </Card>
+            </Link>
+
+            <Link href="/noticias">
+              <Card className="hover:shadow-lg transition-shadow cursor-pointer h-full">
+                <CardHeader>
+                  <CardTitle className="text-lg">Noticias</CardTitle>
+                </CardHeader>
+                <CardContent>
+                  <p className="text-sm text-gray-600">Últimas novedades del club</p>
+                </CardContent>
+              </Card>
+            </Link>
+
+            <Link href="/tienda">
+              <Card className="hover:shadow-lg transition-shadow cursor-pointer h-full">
+                <CardHeader>
+                  <CardTitle className="text-lg">Tienda</CardTitle>
+                </CardHeader>
+                <CardContent>
+                  <p className="text-sm text-gray-600">Productos oficiales del club</p>
+                </CardContent>
+              </Card>
+            </Link>
+          </div>
+        </div>
+      </section>
+
+      {/* Coming Soon */}
+      <section className="py-16">
+        <div className="mx-auto max-w-7xl px-4 lg:px-8 text-center">
+          <h2 className="text-3xl font-bold text-gray-900 mb-4">Próximamente</h2>
+          <p className="text-gray-600 max-w-2xl mx-auto">
+            Estamos trabajando en traerte la mejor experiencia digital. Pronto podrás disfrutar de
+            partidos en vivo, estadísticas detalladas, contenido exclusivo y mucho más.
+          </p>
+        </div>
+      </section>
+    </>
+  );
+}
+
+function MatchHighlightsSkeleton() {
+  return (
+    <section className="py-16 bg-white">
+      <div className="mx-auto max-w-7xl px-4 lg:px-8">
+        <div className="max-w-3xl mx-auto">
+          <div className="animate-pulse space-y-4">
+            <div className="h-8 bg-gray-200 rounded w-1/3 mx-auto" />
+            <div className="h-48 bg-gray-100 rounded" />
+          </div>
+        </div>
+      </div>
+    </section>
+  );
+}
+
+async function MatchHighlights() {
+  const allMatches = await getMatches();
+  const nextMatch = allMatches
+    .filter((m) => m.status === "scheduled")
+    .sort((a, b) => new Date(a.match_date).getTime() - new Date(b.match_date).getTime())[0];
+  const lastMatch = allMatches
+    .filter((m) => m.status === "finished")
+    .sort((a, b) => new Date(b.match_date).getTime() - new Date(a.match_date).getTime())[0];
+
+  return (
+    <>
       {/* Next Match */}
       {nextMatch && (
         <section className="py-16 bg-white">
@@ -136,68 +224,6 @@ export default async function HomePage() {
           </div>
         </section>
       )}
-
-      {/* Quick Links */}
-      <section className="py-16 bg-white">
-        <div className="mx-auto max-w-7xl px-4 lg:px-8">
-          <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-4">
-            <Link href="/partidos">
-              <Card className="hover:shadow-lg transition-shadow cursor-pointer h-full">
-                <CardHeader>
-                  <CardTitle className="text-lg">Partidos</CardTitle>
-                </CardHeader>
-                <CardContent>
-                  <p className="text-sm text-gray-600">Calendario, resultados y clasificación</p>
-                </CardContent>
-              </Card>
-            </Link>
-
-            <Link href="/equipo">
-              <Card className="hover:shadow-lg transition-shadow cursor-pointer h-full">
-                <CardHeader>
-                  <CardTitle className="text-lg">Equipo</CardTitle>
-                </CardHeader>
-                <CardContent>
-                  <p className="text-sm text-gray-600">Plantilla y cuerpo técnico</p>
-                </CardContent>
-              </Card>
-            </Link>
-
-            <Link href="/noticias">
-              <Card className="hover:shadow-lg transition-shadow cursor-pointer h-full">
-                <CardHeader>
-                  <CardTitle className="text-lg">Noticias</CardTitle>
-                </CardHeader>
-                <CardContent>
-                  <p className="text-sm text-gray-600">Últimas novedades del club</p>
-                </CardContent>
-              </Card>
-            </Link>
-
-            <Link href="/tienda">
-              <Card className="hover:shadow-lg transition-shadow cursor-pointer h-full">
-                <CardHeader>
-                  <CardTitle className="text-lg">Tienda</CardTitle>
-                </CardHeader>
-                <CardContent>
-                  <p className="text-sm text-gray-600">Productos oficiales del club</p>
-                </CardContent>
-              </Card>
-            </Link>
-          </div>
-        </div>
-      </section>
-
-      {/* Coming Soon */}
-      <section className="py-16">
-        <div className="mx-auto max-w-7xl px-4 lg:px-8 text-center">
-          <h2 className="text-3xl font-bold text-gray-900 mb-4">Próximamente</h2>
-          <p className="text-gray-600 max-w-2xl mx-auto">
-            Estamos trabajando en traerte la mejor experiencia digital. Pronto podrás disfrutar de
-            partidos en vivo, estadísticas detalladas, contenido exclusivo y mucho más.
-          </p>
-        </div>
-      </section>
     </>
   );
 }
