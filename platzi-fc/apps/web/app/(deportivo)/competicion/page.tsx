@@ -1,7 +1,7 @@
 import { Metadata } from "next";
 import { Breadcrumbs } from "@/components/shared/breadcrumbs";
 import { Card, CardContent, Badge } from "@/components/ui";
-import { mockStandings } from "@/lib/data/mock-standings";
+import { getStandings, getCurrentSeason } from "@/lib/supabase/queries";
 import { generateSEO } from "@/lib/utils/seo";
 
 export const metadata: Metadata = generateSEO({
@@ -10,8 +10,10 @@ export const metadata: Metadata = generateSEO({
   path: "/competicion",
 });
 
-export default function CompeticionPage() {
-  const sortedStandings = [...mockStandings].sort((a, b) => a.position - b.position);
+export default async function CompeticionPage() {
+  const season = await getCurrentSeason();
+  const standings = await getStandings(season.id);
+  const sortedStandings = [...standings].sort((a, b) => a.position - b.position);
 
   const getFormBadge = (result: string) => {
     const variants = {
@@ -86,7 +88,9 @@ export default function CompeticionPage() {
                 {sortedStandings.map((team) => (
                   <tr
                     key={team.id}
-                    className={team.team_id === "platzi-fc" ? "bg-platzi-green/5" : "hover:bg-gray-50"}
+                    className={
+                      team.team_id === "platzi-fc" ? "bg-platzi-green/5" : "hover:bg-gray-50"
+                    }
                   >
                     <td className="px-6 py-4 whitespace-nowrap">
                       <div className="flex items-center">
@@ -144,7 +148,11 @@ export default function CompeticionPage() {
                     <td className="px-6 py-4 whitespace-nowrap">
                       <div className="flex gap-1 justify-center">
                         {team.form?.split("").map((result, idx) => (
-                          <Badge key={idx} variant={getFormBadge(result)} className="w-6 h-6 p-0 flex items-center justify-center text-xs">
+                          <Badge
+                            key={idx}
+                            variant={getFormBadge(result)}
+                            className="w-6 h-6 p-0 flex items-center justify-center text-xs"
+                          >
                             {getFormLabel(result)}
                           </Badge>
                         ))}

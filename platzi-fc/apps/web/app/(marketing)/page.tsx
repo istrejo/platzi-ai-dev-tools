@@ -1,10 +1,13 @@
 import { Button, Card, CardContent, CardHeader, CardTitle, Badge } from "@/components/ui";
 import Link from "next/link";
-import { mockMatches } from "@/lib/data/mock-matches";
+import { getMatches } from "@/lib/supabase/queries";
 
-export default function HomePage() {
-  const nextMatch = mockMatches.find((m) => m.status === "scheduled");
-  const lastMatch = mockMatches.find((m) => m.status === "finished");
+export default async function HomePage() {
+  const allMatches = await getMatches();
+  const nextMatch = allMatches.find((m) => m.status === "scheduled");
+  const lastMatch = allMatches
+    .filter((m) => m.status === "finished")
+    .sort((a, b) => new Date(b.match_date).getTime() - new Date(a.match_date).getTime())[0];
 
   return (
     <>
