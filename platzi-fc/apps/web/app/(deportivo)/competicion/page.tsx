@@ -95,170 +95,92 @@ async function StandingsTable() {
   return (
     <Card className="mt-8">
       <CardContent className="p-0">
-          {/* Desktop Table */}
-          <div className="hidden md:block overflow-x-auto">
-            <table className="w-full">
-              <thead className="bg-gray-50 border-b">
-                <tr>
-                  <th className="px-6 py-4 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">
-                    Pos
-                  </th>
-                  <th className="px-6 py-4 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">
-                    Equipo
-                  </th>
-                  <th className="px-6 py-4 text-center text-xs font-semibold text-gray-600 uppercase tracking-wider">
-                    PJ
-                  </th>
-                  <th className="px-6 py-4 text-center text-xs font-semibold text-gray-600 uppercase tracking-wider">
-                    G
-                  </th>
-                  <th className="px-6 py-4 text-center text-xs font-semibold text-gray-600 uppercase tracking-wider">
-                    E
-                  </th>
-                  <th className="px-6 py-4 text-center text-xs font-semibold text-gray-600 uppercase tracking-wider">
-                    P
-                  </th>
-                  <th className="px-6 py-4 text-center text-xs font-semibold text-gray-600 uppercase tracking-wider">
-                    GF
-                  </th>
-                  <th className="px-6 py-4 text-center text-xs font-semibold text-gray-600 uppercase tracking-wider">
-                    GC
-                  </th>
-                  <th className="px-6 py-4 text-center text-xs font-semibold text-gray-600 uppercase tracking-wider">
-                    DG
-                  </th>
-                  <th className="px-6 py-4 text-center text-xs font-semibold text-gray-600 uppercase tracking-wider">
-                    Pts
-                  </th>
-                  <th className="px-6 py-4 text-center text-xs font-semibold text-gray-600 uppercase tracking-wider">
-                    Forma
-                  </th>
-                </tr>
-              </thead>
-              <tbody className="divide-y divide-gray-200">
-                {sortedStandings.map((team) => (
-                  <tr
-                    key={team.id}
-                    className={
-                      team.team_slug === "platzi-fc" ? "bg-platzi-green/5" : "hover:bg-gray-50"
-                    }
-                  >
-                    <td className="px-6 py-4 whitespace-nowrap">
-                      <div className="flex items-center">
-                        <span
-                          className={`font-bold ${
-                            team.position <= 4
-                              ? "text-platzi-green"
-                              : team.position >= 18
-                                ? "text-red-600"
-                                : "text-gray-900"
-                          }`}
-                        >
-                          {team.position}
-                        </span>
-                      </div>
-                    </td>
-                    <td className="px-6 py-4 whitespace-nowrap">
-                      <div className="font-semibold text-gray-900">{team.team_name}</div>
-                    </td>
-                    <td className="px-6 py-4 whitespace-nowrap text-center text-sm text-gray-600">
-                      {team.played}
-                    </td>
-                    <td className="px-6 py-4 whitespace-nowrap text-center text-sm text-gray-600">
-                      {team.won}
-                    </td>
-                    <td className="px-6 py-4 whitespace-nowrap text-center text-sm text-gray-600">
-                      {team.drawn}
-                    </td>
-                    <td className="px-6 py-4 whitespace-nowrap text-center text-sm text-gray-600">
-                      {team.lost}
-                    </td>
-                    <td className="px-6 py-4 whitespace-nowrap text-center text-sm text-gray-600">
-                      {team.goals_for}
-                    </td>
-                    <td className="px-6 py-4 whitespace-nowrap text-center text-sm text-gray-600">
-                      {team.goals_against}
-                    </td>
-                    <td className="px-6 py-4 whitespace-nowrap text-center text-sm">
+        {/* Desktop Table */}
+        <div className="hidden md:block overflow-x-auto">
+          <table className="w-full">
+            <thead className="bg-gray-50 border-b">
+              <tr>
+                <th className="px-6 py-4 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">
+                  Pos
+                </th>
+                <th className="px-6 py-4 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">
+                  Equipo
+                </th>
+                <th className="px-6 py-4 text-center text-xs font-semibold text-gray-600 uppercase tracking-wider">
+                  PJ
+                </th>
+                <th className="px-6 py-4 text-center text-xs font-semibold text-gray-600 uppercase tracking-wider">
+                  G
+                </th>
+                <th className="px-6 py-4 text-center text-xs font-semibold text-gray-600 uppercase tracking-wider">
+                  E
+                </th>
+                <th className="px-6 py-4 text-center text-xs font-semibold text-gray-600 uppercase tracking-wider">
+                  P
+                </th>
+                <th className="px-6 py-4 text-center text-xs font-semibold text-gray-600 uppercase tracking-wider">
+                  GF
+                </th>
+                <th className="px-6 py-4 text-center text-xs font-semibold text-gray-600 uppercase tracking-wider">
+                  GC
+                </th>
+                <th className="px-6 py-4 text-center text-xs font-semibold text-gray-600 uppercase tracking-wider">
+                  DG
+                </th>
+                <th className="px-6 py-4 text-center text-xs font-semibold text-gray-600 uppercase tracking-wider">
+                  Pts
+                </th>
+                <th className="px-6 py-4 text-center text-xs font-semibold text-gray-600 uppercase tracking-wider">
+                  Forma
+                </th>
+              </tr>
+            </thead>
+            <tbody className="divide-y divide-gray-200">
+              {sortedStandings.map((team) => (
+                <tr
+                  key={team.id}
+                  className={
+                    team.team_slug === "platzi-fc" ? "bg-platzi-green/5" : "hover:bg-gray-50"
+                  }
+                >
+                  <td className="px-6 py-4 whitespace-nowrap">
+                    <div className="flex items-center">
                       <span
-                        className={`font-semibold ${
-                          team.goal_difference > 0
-                            ? "text-green-600"
-                            : team.goal_difference < 0
+                        className={`font-bold ${
+                          team.position <= 4
+                            ? "text-platzi-green"
+                            : team.position >= 18
                               ? "text-red-600"
-                              : "text-gray-600"
+                              : "text-gray-900"
                         }`}
                       >
-                        {team.goal_difference > 0 ? "+" : ""}
-                        {team.goal_difference}
+                        {team.position}
                       </span>
-                    </td>
-                    <td className="px-6 py-4 whitespace-nowrap text-center">
-                      <span className="font-bold text-gray-900">{team.points}</span>
-                    </td>
-                    <td className="px-6 py-4 whitespace-nowrap">
-                      <div className="flex gap-1 justify-center">
-                        {team.form?.split("").map((result, idx) => (
-                          <Badge
-                            key={idx}
-                            variant={getFormBadge(result)}
-                            className="w-6 h-6 p-0 flex items-center justify-center text-xs"
-                          >
-                            {getFormLabel(result)}
-                          </Badge>
-                        ))}
-                      </div>
-                    </td>
-                  </tr>
-                ))}
-              </tbody>
-            </table>
-          </div>
-
-          {/* Mobile Cards */}
-          <div className="md:hidden divide-y divide-gray-200">
-            {sortedStandings.map((team) => (
-              <div
-                key={team.id}
-                className={`p-4 ${team.team_slug === "platzi-fc" ? "bg-platzi-green/5" : ""}`}
-              >
-                <div className="flex items-center justify-between mb-3">
-                  <div className="flex items-center gap-3">
+                    </div>
+                  </td>
+                  <td className="px-6 py-4 whitespace-nowrap">
+                    <div className="font-semibold text-gray-900">{team.team_name}</div>
+                  </td>
+                  <td className="px-6 py-4 whitespace-nowrap text-center text-sm text-gray-600">
+                    {team.played}
+                  </td>
+                  <td className="px-6 py-4 whitespace-nowrap text-center text-sm text-gray-600">
+                    {team.won}
+                  </td>
+                  <td className="px-6 py-4 whitespace-nowrap text-center text-sm text-gray-600">
+                    {team.drawn}
+                  </td>
+                  <td className="px-6 py-4 whitespace-nowrap text-center text-sm text-gray-600">
+                    {team.lost}
+                  </td>
+                  <td className="px-6 py-4 whitespace-nowrap text-center text-sm text-gray-600">
+                    {team.goals_for}
+                  </td>
+                  <td className="px-6 py-4 whitespace-nowrap text-center text-sm text-gray-600">
+                    {team.goals_against}
+                  </td>
+                  <td className="px-6 py-4 whitespace-nowrap text-center text-sm">
                     <span
-                      className={`text-xl font-bold ${
-                        team.position <= 4
-                          ? "text-platzi-green"
-                          : team.position >= 18
-                            ? "text-red-600"
-                            : "text-gray-900"
-                      }`}
-                    >
-                      {team.position}
-                    </span>
-                    <span className="font-semibold text-gray-900">{team.team_name}</span>
-                  </div>
-                  <span className="text-xl font-bold text-gray-900">{team.points}</span>
-                </div>
-                <div className="grid grid-cols-4 gap-2 text-sm text-center">
-                  <div>
-                    <div className="text-gray-500 text-xs">PJ</div>
-                    <div className="font-semibold">{team.played}</div>
-                  </div>
-                  <div>
-                    <div className="text-gray-500 text-xs">G-E-P</div>
-                    <div className="font-semibold">
-                      {team.won}-{team.drawn}-{team.lost}
-                    </div>
-                  </div>
-                  <div>
-                    <div className="text-gray-500 text-xs">GF-GC</div>
-                    <div className="font-semibold">
-                      {team.goals_for}-{team.goals_against}
-                    </div>
-                  </div>
-                  <div>
-                    <div className="text-gray-500 text-xs">DG</div>
-                    <div
                       className={`font-semibold ${
                         team.goal_difference > 0
                           ? "text-green-600"
@@ -269,19 +191,97 @@ async function StandingsTable() {
                     >
                       {team.goal_difference > 0 ? "+" : ""}
                       {team.goal_difference}
+                    </span>
+                  </td>
+                  <td className="px-6 py-4 whitespace-nowrap text-center">
+                    <span className="font-bold text-gray-900">{team.points}</span>
+                  </td>
+                  <td className="px-6 py-4 whitespace-nowrap">
+                    <div className="flex gap-1 justify-center">
+                      {team.form?.split("").map((result: string, idx: number) => (
+                        <Badge
+                          key={idx}
+                          variant={getFormBadge(result)}
+                          className="w-6 h-6 p-0 flex items-center justify-center text-xs"
+                        >
+                          {getFormLabel(result)}
+                        </Badge>
+                      ))}
                     </div>
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
+
+        {/* Mobile Cards */}
+        <div className="md:hidden divide-y divide-gray-200">
+          {sortedStandings.map((team) => (
+            <div
+              key={team.id}
+              className={`p-4 ${team.team_slug === "platzi-fc" ? "bg-platzi-green/5" : ""}`}
+            >
+              <div className="flex items-center justify-between mb-3">
+                <div className="flex items-center gap-3">
+                  <span
+                    className={`text-xl font-bold ${
+                      team.position <= 4
+                        ? "text-platzi-green"
+                        : team.position >= 18
+                          ? "text-red-600"
+                          : "text-gray-900"
+                    }`}
+                  >
+                    {team.position}
+                  </span>
+                  <span className="font-semibold text-gray-900">{team.team_name}</span>
+                </div>
+                <span className="text-xl font-bold text-gray-900">{team.points}</span>
+              </div>
+              <div className="grid grid-cols-4 gap-2 text-sm text-center">
+                <div>
+                  <div className="text-gray-500 text-xs">PJ</div>
+                  <div className="font-semibold">{team.played}</div>
+                </div>
+                <div>
+                  <div className="text-gray-500 text-xs">G-E-P</div>
+                  <div className="font-semibold">
+                    {team.won}-{team.drawn}-{team.lost}
                   </div>
                 </div>
-                <div className="mt-3 flex gap-1">
-                  {team.form?.split("").map((result, idx) => (
-                    <Badge key={idx} variant={getFormBadge(result)} className="flex-1 text-center">
-                      {getFormLabel(result)}
-                    </Badge>
-                  ))}
+                <div>
+                  <div className="text-gray-500 text-xs">GF-GC</div>
+                  <div className="font-semibold">
+                    {team.goals_for}-{team.goals_against}
+                  </div>
+                </div>
+                <div>
+                  <div className="text-gray-500 text-xs">DG</div>
+                  <div
+                    className={`font-semibold ${
+                      team.goal_difference > 0
+                        ? "text-green-600"
+                        : team.goal_difference < 0
+                          ? "text-red-600"
+                          : "text-gray-600"
+                    }`}
+                  >
+                    {team.goal_difference > 0 ? "+" : ""}
+                    {team.goal_difference}
+                  </div>
                 </div>
               </div>
-            ))}
-          </div>
+              <div className="mt-3 flex gap-1">
+                {team.form?.split("").map((result: string, idx: number) => (
+                  <Badge key={idx} variant={getFormBadge(result)} className="flex-1 text-center">
+                    {getFormLabel(result)}
+                  </Badge>
+                ))}
+              </div>
+            </div>
+          ))}
+        </div>
       </CardContent>
     </Card>
   );
