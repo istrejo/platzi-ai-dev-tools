@@ -1,6 +1,6 @@
 # Platzi FC
 
-Sitio web oficial del Platzi FC construido con Next.js 15, TypeScript y Tailwind CSS.
+Sitio web oficial del Platzi FC construido con Next.js 15, TypeScript y Tailwind CSS y mucho más.
 
 ## Stack Tecnológico
 
